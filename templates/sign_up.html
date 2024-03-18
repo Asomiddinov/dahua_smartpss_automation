@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+{% if user.id == 1%}
+<h3 class="text-center">
+    Fill with necessary data:
+</h3>
+<form action="" method="post">
+    <div class="form-control container">
+        <label for="email"><b>Email</b></label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="email" required>
+        <br>
+        <label for="fullname"><b>Full name</b></label>
+        <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full name" required>
+        <br>
+        <label for="role"><b>Role</b></label>
+        <input type="text" class="form-control" id="role" name="role" placeholder="role" required>
+        <br>
+        <label for="password1"><b>Password</b></label>
+        <input type="password" class="form-control" id="password1" name="password1" placeholder="Password" required>
+        <br>
+        <label for="password2"><b>Confirm Password</b></label>
+        <input type="password" class="form-control" id="password2" name="password2" placeholder="Repeat Password"
+            required>
+        <br>
+    </div>
+    <br>
+    <div class="text-center">
+        <button type="submit" class="btn btn-success"><b>Ok</b></button>
+    </div>
+</form>
+{% else %}
+<h3 class="text-center" style="color: rgb(36, 245, 113)">
+    <border style="background-color: cadetblue">You're not admin. You cannot see whole site!</border>
+</h3>
+<style>
+    h3 {
+        color: rgb(133, 61, 61);
+    }
+</style>
+{% endif %}
+{% endblock %}

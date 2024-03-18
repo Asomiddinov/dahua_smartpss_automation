@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block content %}
+<form method="POST">
+    <div class="row container-fluid">
+        <div class="col">От даты: <input class="form-control datepicker" name="start_date" required="required"></div>
+        <div class="col">До даты: <input class="form-control datepicker" name="end_date" required="required"></div>
+        <div class="col">Сотрудник: <input class="form-control" name="person_name"></div>
+        <div class="col">№ сотрудника: <input class="form-control" name="person_id"></div>
+    </div><br>
+    <center>
+        <div class="container-fluid"><input class="btn btn-dark" type="submit" value="Принять"></div>
+    </center>
+</form>
+<script>
+    $(function () {
+        $(".datepicker").datepicker({ dateFormat: 'dd/mm/yy' });
+    });
+</script>
+<style>
+    .dataframe {
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+{% endblock %}

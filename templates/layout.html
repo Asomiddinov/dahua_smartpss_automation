@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if title %}
+    <link rel="icon" href="static/images/babai_removebg_canva.png" type="image/icon type">
+    <title>{{ title }}</title>
+    {% else %}
+    <link rel="icon" href="static/images/babai_removebg_canva.png" type="image/icon type">
+    <b>
+        <title>Babai Systems</title>
+    </b>
+    {% endif %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <!--FONT AWESOME-->
+    <script src="https://kit.fontawesome.com/ee3350903f.js" crossorigin="anonymous"></script>
+    <!--Autofill(autocomplete) data:-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+    <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
+        rel="stylesheet" type="text/css" />
+    <!---->
+</head>
+
+<body>
+    {% if user.is_authenticated %}
+    <!-- <a href="/index" title="Home page" id="home_page">
+        <img src="static/images/babai_removebg_canva.png" alt="babai" class="rounded-5 mx-auto d-block" width="33"
+            height="33">
+    </a> -->
+    <center>
+        <a href="/index" class="btn btn-dark" id="home_page"><img src="static/images/babai_without_bg.png"
+                class="rounded-10 mx-auto d-block" width="35" height="35">
+        </a>
+        <a href="/sign_up" class="btn btn-success" id="sign_up">Зарегистрировать</a>
+        <a href="/logout" class="btn btn-success" id="logout">Выйти из системы</a>
+        <a href="/view_report" class="btn btn-success" id="view_report">Посещаемость</a>
+        <a href="/download_report" class="btn btn-success" id="download_report">Скачать отчеть</a>
+    </center>
+    <p class="container">
+        <b>{{ user.id }} | {{ user.fullname }} | {{ user.email }}</b>
+    </p>
+    <div class="navbar text-center">
+        <div class="sidebar">
+            <a href="/index" title="Home page">
+                <img src="static/images/babai_removebg_canva.png" alt="babai" class="rounded-5 mx-auto d-block"
+                    width="33" height="33">
+            </a>
+        </div>
+        <div class="sidebar">
+            <a href="/view_report" title="Work Hub">
+                <b><i class="fa-brands fa-threads"></i></b>
+            </a>
+        </div>
+        <!-- <div class="sidebar">
+            <a href="/orders" title="Orders">
+                <b><i class="fa-solid fa-hands-holding-circle"></i></b>
+            </a>
+        </div>
+        <div class="sidebar">
+            <a href="/production" title="Production">
+                <b><i class="fa-solid fa-industry"></i></b>
+            </a>
+        </div>
+        <div class="sidebar">
+            <a href="/stock" title="Stock">
+                <b><i class="fa-solid fa-warehouse"></i></b>
+            </a>
+        </div> -->
+        <div class="sidebar">
+            <a href="/sign_up" title="Signup">
+                <b><i class="fa-solid fa-user-plus"></i></b>
+            </a>
+        </div>
+        <div class="sidebar">
+            <a href="/logout" title="loguot">
+                <b><i class="fa-solid fa-right-from-bracket"></i></b>
+            </a>
+        </div>
+        <div class="sidebar">
+            <a href="https://t.me/abasomiddinov" target="_blank"><img src="static/images/telegram_vec.png" class="icon"
+                    width="15" height="15">
+            </a>
+        </div>
+        <div class="sidebar">
+            <a href="https://www.youtube.com/channel/UCYEq46DwMt5ARyGmlEX6VFQ" target="_blank"><img
+                    src="static/images/youtube_vec.png" class="icon" width="20" height="15">
+            </a>
+        </div>
+        <div class="sidebar">
+            <a href="https://www.instagram.com/abasomiddinov/" target="_blank"><img src="static/images/instagram.png"
+                    class="icon" width="15" height="15">
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <p class="container">
+        <b>You're not logged in</b>
+    </p>
+    <center>
+        <a href="/index" class="rounded-5 mx-auto d-block" title="Home page" id="home_page">
+            <img src="static/images/babai_removebg_canva.png" alt="babai" width="33" height="33" id="home_babai">
+        </a>
+        <a href="/sign_up" class="btn btn-success" id="sign_up">Sign Up</a>
+        <a href="/login" class="btn btn-success" id="login">Login</a>
+        <a href="/view_report" class="btn btn-success" id="view_report">Attandence</a>
+        <a href="/download_report" class="btn btn-success" id="download_report">Download report</a>
+    </center>
+    <div class="navbar text-center">
+        <div class="sidebar">
+            <a href="/index" title="Home page">
+                <img src="static/images/babai.png" alt="babai" class="rounded-5 mx-auto d-block" width="33" height="33">
+            </a>
+        </div><br>
+        <div class="sidebar">
+            <a href="/view_report" title="HR">
+                <b><i class="fa-brands fa-threads"></i></b>
+            </a>
+        </div><br>
+        <div class="sidebar">
+            <a href="/login" title="Login">
+                <b><i class="fa-solid fa-right-to-bracket"></i></b>
+            </a>
+        </div>
+        <div class="sidebar">
+            <a href="https://t.me/abasomiddinov" target="_blank"><img src="static/images/telegram_vec.png" class="icon"
+                    width="15" height="15">
+            </a>
+        </div>
+        <div class="sidebar">
+            <a href="https://www.youtube.com/channel/UCYEq46DwMt5ARyGmlEX6VFQ" target="_blank"><img
+                    src="static/images/youtube_vec.png" class="icon" width="20" height="15">
+            </a>
+        </div>
+        <div class="sidebar">
+            <a href="https://www.instagram.com/abasomiddinov/" target="_blank"><img src="static/images/instagram.png"
+                    class="icon" width="15" height="15">
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
+        </script>
+</body>
+<style>
+    .form-control.container {
+        background-color: #FFBE98;
+    }
+</style>
+<!-- Start of flash -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+{% if category=="error" %}
+<div class="alert alert-warning alert-dismissible fade show container" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% else %}
+<div class="alert alert-success alert-dismissible fade show container" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endwith %}
+<!-- end of flash -->
+{% block content %}
+{% endblock %}
+<div class="footer">
+    <b>Babai</b>
+</div>
+<style>
+    #home_babai {
+        position: relative;
+    }
+
+    #home_page {
+        width: auto;
+    }
+
+    #sign_up {
+        width: auto;
+    }
+
+    #logout {
+        width: auto;
+    }
+
+    #view_report {
+        width: auto;
+    }
+
+    #download_report {
+        width: auto;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    /*rgb(51, 153, 102)*/
+    body {
+        background-color: silver;
+        /*background-image: url({{ url_for('static', filename='images/babai_backg_.jpg') }});*/
+        background-repeat: repeat;
+        background-size: 100%;
+        margin: 0 auto;
+    }
+
+    p {
+        text-align: center;
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+    }
+
+    .footer.form-control.container {
+        width: auto;
+        background-color: #ffbe98;
+    }
+
+    .navbar {
+        /*display: flex;*/
+        flex-direction: column;
+        justify-content: relative;
+        position: fixed;
+        top: 30%;
+        right: 0;
+        height: auto;
+        width: relative;
+        background-color: silver;
+        border: 1px solid white;
+        /*padding: 0px 2px;*/
+        margin: 0 auto;
+        border-radius: 10px;
+    }
+
+    .sidebar {
+        margin-bottom: 0px;
+        /*border-bottom: 2px solid white;*/
+        /*padding: 5px;*/
+        width: 100%;
+    }
+
+    @media (min-width: 100px) and (max-width: 150px) {
+        .form-group {
+            min-width: 60px;
+            max-width: 70px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 5%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 150px) and (max-width: 190px) {
+        .form-group {
+            min-width: 70px;
+            max-width: 120px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 100px;
+            max-width: 130px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 190px) and (max-width: 250px) {
+        .form-group {
+            min-width: 120px;
+            max-width: 150px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 110px;
+            max-width: 130px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 250px) and (max-width: 300px) {
+        .form-group {
+            min-width: 90px;
+            max-width: 130px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 160px;
+            max-width: 170px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 300px) and (max-width: 320px) {
+
+        .form-group {
+            min-width: 150px;
+            max-width: 170px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 170px;
+            max-width: 190px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 320px) and (max-width: 400px) {
+
+        .form-group {
+            min-width: 200px;
+            max-width: 230px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 180px;
+            max-width: 200px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 400px) and (max-width: 450px) {
+        .form-group {
+            min-width: 270px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 210px;
+            max-width: 230px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 450px) and (max-width: 500px) {
+        .form-group {
+            min-width: 290px;
+            max-width: 310px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 230px;
+            max-width: 250px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 501px) and (max-width: 521px) {
+        .form-group {
+            min-width: 320px;
+            max-width: 340px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 270px;
+            max-width: 300px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 521px) and (max-width: 550px) {
+        .form-group {
+            min-width: 400px;
+            max-width: 432px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 300px;
+            max-width: 330px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 550px) and (max-width: 612px) {
+        .form-group {
+            min-width: 432px;
+            max-width: 444px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 350px;
+            max-width: 380px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 612px) and (max-width: 712px) {
+        .form-group {
+            min-width: 500px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 400px;
+            max-width: 450px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 712px) and (max-width: 912px) {
+        .form-group {
+            min-width: 565px;
+            max-width: 666px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 500px;
+            max-width: 550px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 912px) and (max-width: 1025px) {
+        .form-group {
+            min-width: 730px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            min-width: 650px;
+            max-width: 700px;
+        }
+
+        .table {
+            min-width: 60px;
+            max-width: 70px;
+        }
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+
+    @media (min-width: 1025px) {
+        .form-group {
+            min-width: auto;
+            max-width: auto;
+            margin: 0 auto;
+        }
+
+        /*.form-control {*/
+        /*    min-width: 100px;*/
+        /*    max-width: 130px;*/
+        /*}*/
+
+        .btn {
+            width: 30%;
+            right: 40px;
+        }
+    }
+</style>
+<!--class="" style="position: relative; top: 3px; left: -45%;"-->
+
+</html>

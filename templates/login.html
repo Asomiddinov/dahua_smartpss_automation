@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+{% block content %}
+<form action="" method="post">
+    <br>
+    <h3 text-align="center">
+    </h3>
+    <div class="container">
+        <div class="form-group">
+            <label for="email" style="color: white;"><b>Email</b></label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="email" required>
+            <br>
+            <label for="password" style="color: white;"><b>Password</b></label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+            <br>
+        </div>
+        <div text-align="center">
+            <button type="submit" class="btn btn-success"><b>Ok</b></button>
+        </div>
+    </div>
+</form>
+<style>
+    body {
+        /*background-color: rgb(95, 151, 130);*/
+        /* background-image: url(url_for('static', filename='images/web_water.jpg')); */
+        background-repeat: no-repeat;
+        background-size: 100%;
+    }
+
+    .label {
+        width: 200px;
+    }
+</style>
+{% endblock %}

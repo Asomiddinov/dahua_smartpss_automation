@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% if current_user.email == "basomiddinov@gmail.com" %}
+
+{% for user in users %}
+<div class="text-center">
+    <b>{{ user.id }} | {{ user.fullname }} | {{ user.email }} | {{ user.comment }}_{{ user.role }}</b>
+</div>
+{% endfor %}
+
+{% else %}
+<h1>How are you???</h1>
+{% endif %}
+{% endblock %}
