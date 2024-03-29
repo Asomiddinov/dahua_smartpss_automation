@@ -52,6 +52,11 @@ def view_report():
             'end_date'), '%d/%m/%Y').strftime('%Y-%m-%d')
         person_name = request.form.get('person_name')
         person_id = request.form.get('person_id')
+        chosen_users = ['Gaybullayev Furqat', 'Muxtorov Aslam',
+                        'Raxmonov Qurbon', 'Maruf Yuldashev']
+        hide_dates = [pd.to_datetime(date).date()
+                      for date in ['2024-03-21', '2024-03-22']]
+
         conn = sqlite3.connect(
             'C:/Users/Public/SmartPSSLite/Data/User/ExternalDatabase/ExternalDataManager.db')
         query = f"SELECT * FROM AttendanceRecordInfo WHERE DATE(AttendanceDateTime/1000, 'unixepoch') BETWEEN '{start_date}' AND '{end_date}' AND PersonName LIKE '%{person_name}%' AND PersonID LIKE '%{person_id}%'"
@@ -61,17 +66,24 @@ def view_report():
             df['AttendanceDateTime'], unit='ms')
         df['AttendanceDateTime'] = df['AttendanceDateTime'] + \
             timedelta(hours=5)
-        df['AttendanceDateTime'] = df['AttendanceDateTime'].dt.strftime(
-            '%d/%m/%Y %H:%M:%S')
+        # Creation a column for the day of the week
+        df['DayOfWeek'] = df['AttendanceDateTime'].dt.dayofweek
+        # Hiding employees on holidays
+        df = df[~((df['AttendanceDateTime'].dt.date.isin(hide_dates))
+                  & (~df['PersonName'].isin(chosen_users)))]
+        #
         df['Handler'] = df['DeviceIPAddress'].apply(lambda x: 'Вход' if x in [
                                                     '10.210.122.4', '10.210.122.5'] else ('Уход' if x in ['10.210.122.2', '10.210.122.3'] else ''))
         df['AttendanceMethod'] = df['AttendanceMethod'].apply(
             lambda x: 'Лицо' if x in [15] else ('Отпечатка' if x in [4] else ''))
-        df['AttendanceDateTime'] = pd.to_datetime(
-            df['AttendanceDateTime'], format='%d/%m/%Y %H:%M:%S')
+        # Filtering entries for the weekends unless they are from the chosen users
+        df = df[(df['DayOfWeek'] < 5) | (df['PersonName'].isin(chosen_users))]
+        #
+        df['AttendanceDateTime'] = df['AttendanceDateTime'].dt.strftime(
+            '%d/%m/%Y %H:%M:%S')
         df = df.sort_values('AttendanceDateTime')
         df = df.drop(
-            columns=['PerSonCardNo', 'AttendanceState', 'DeviceIPAddress', 'DeviceName', 'SnapshotsPath', 'AttendanceUtcTime', 'Remarks'])
+            columns=['PerSonCardNo', 'AttendanceState', 'DeviceIPAddress', 'DeviceName', 'SnapshotsPath', 'AttendanceUtcTime', 'Remarks', 'DayOfWeek'])
         html_table = df.to_html(index=False)
         conn.close()
         return html_table
@@ -88,6 +100,11 @@ def download_report():
             'end_date'), '%d/%m/%Y').strftime('%Y-%m-%d')
         person_name = request.form.get('person_name')
         person_id = request.form.get('person_id')
+        chosen_users = ['Gaybullayev Furqat', 'Muxtorov Aslam',
+                        'Raxmonov Qurbon', 'Maruf Yuldashev']
+        hide_dates = [pd.to_datetime(date).date()
+                      for date in ['2024-03-21', '2024-03-22']]
+
         conn = sqlite3.connect(
             'C:/Users/Public/SmartPSSLite/Data/User/ExternalDatabase/ExternalDataManager.db')
         query = f"SELECT * FROM AttendanceRecordInfo WHERE DATE(AttendanceDateTime/1000, 'unixepoch') BETWEEN '{start_date}' AND '{end_date}' AND PersonName LIKE '%{person_name}%' AND PersonID LIKE '%{person_id}%'"
@@ -97,28 +114,35 @@ def download_report():
             df['AttendanceDateTime'], unit='ms')
         df['AttendanceDateTime'] = df['AttendanceDateTime'] + \
             timedelta(hours=5)
+        # Creation a column for the day of the week
+        df['DayOfWeek'] = df['AttendanceDateTime'].dt.dayofweek
         df['AttendanceDateTime'] = df['AttendanceDateTime'].dt.strftime(
             '%d/%m/%Y %H:%M:%S')
         df['Handler'] = df['DeviceIPAddress'].apply(lambda x: 'Вход' if x in [
                                                     '10.210.122.5', '10.210.122.6'] else ('Уход' if x in ['10.210.122.2', '10.210.122.3'] else ''))
         df['AttendanceMethod'] = df['AttendanceMethod'].apply(
             lambda x: 'Лицо' if x in [15] else ('Отпечатка' if x in [4] else ''))
-
         df['AttendanceDateTime'] = pd.to_datetime(
             df['AttendanceDateTime'], format='%d/%m/%Y %H:%M:%S')
+        # Filtering entries for the weekends unless they are from the chosen users
+        df = df[(df['DayOfWeek'] < 5) | (df['PersonName'].isin(chosen_users))]
+        # Hiding employees on holidays
+        df = df[~((df['AttendanceDateTime'].dt.date.isin(hide_dates))
+                  & (~df['PersonName'].isin(chosen_users)))]
+        #
         df = df.sort_values('AttendanceDateTime')
         df = df.drop(
             columns=['PerSonCardNo', 'AttendanceState', 'DeviceIPAddress', 'DeviceName', 'SnapshotsPath', 'AttendanceUtcTime', 'Remarks'])
         output = io.BytesIO()
-        # Write the DataFrame to the output stream & Save DataFrame to an Excel file
+        # Writing the DataFrame to the output stream & Saving that to an Excel file
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             df.to_excel(writer, index=False)
         output.seek(0)
         conn.close()
-        # Create a response with the output stream & Send the Excel file to the client
+        # Creation a response with the output stream & Sending the Excel file to the user
         response = send_file(
             output, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', as_attachment=True, download_name='report.xlsx')
-        # Set the filename for the download
+        # Setting the filename for the download
         response.headers["Content-Disposition"] = "attachment; filename=report.xlsx"
         return response
     return render_template('view_report.html', user=current_user)
